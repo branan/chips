@@ -94,10 +94,10 @@
   (loop [result () data buf]
     (if (empty? data)
       result ; When the buf is empty, just return our result
-      (let [the-byte (first data)] ; Otherwise, take the next byte from buf and decode it
-        (if (= the-byte -1)
-          (let [count (second data) ; If we are RLE, the next two bytes are count and value
-                value (third data)]
+      (let [the-byte (bit-and (first data) 255)] ; Otherwise, take the next byte from buf and decode it
+        (if (= the-byte 255)
+          (let [count (bit-and (second data) 255) ; If we are RLE, the next two bytes are count and value
+                value (bit-and (third data) 255)]
             (recur
              (concat result (repeat count value))
              (nthnext data 3))) ; and continue with the rest of the data

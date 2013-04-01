@@ -10,4 +10,6 @@
   (let [datapath (first args)
         chipdata (parse-file datapath)
         level (nth (:levels chipdata) (Integer. (second args)))]
+    (dump-layer (second (:layers level)))
+    (println "")
     (dump-layer (first (:layers level)))))

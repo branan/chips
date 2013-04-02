@@ -1,15 +1,14 @@
 (ns chips.core
-  (:import org.lwjgl.LWJGLException
-           [org.lwjgl.opengl Display DisplayMode GL11]
-           [org.lwjgl.input Keyboard]
-           [org.lwjgl.util.glu GLU])
-  (:use chips.core.parser)
+  (:use chips.parser
+        chips.game
+        chips.gui
+        clojure.java.io)
   (:gen-class))
 
 (defn -main [& args]
-  (let [datapath (first args)
-        chipdata (parse-file datapath)
-        level (nth (:levels chipdata) (Integer. (second args)))]
-    (dump-layer (second (:layers level)))
-    (println "")
-    (dump-layer (first (:layers level)))))
+  (let [chipdata (parse-file "CHIPS.DAT")]
+    (loop [state (gui-init (game-init chipdata))]
+      (draw-frame state)
+      (if-not (time-to-quit?)
+        (recur (game-tick (handle-input state))))))
+  (gui-cleanup))

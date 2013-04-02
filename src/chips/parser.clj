@@ -1,4 +1,4 @@
-(ns chips.core.parser
+(ns chips.parser
   (:use gloss.core
         gloss.io
         [clojure.java.io]))

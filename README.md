@@ -1,18 +1,21 @@
 # chips
 
-Chips Challenege emulator in Clojure. Reads the official Chips Challenge data files
+Chips Challenege emulator in Clojure.
 
 ## Installation
 
-Download from http://github.com/branan/chips
+Clone this repository.
+
+You will need to get the Chips Challenge level data and graphics
+tiles. The tileset can be
+[downloaded from the CC wiki](http://chipschallenge.wikia.com/wiki/Tile).
+You're on your own for the level data.
+
+Save the tileset as `TILES.GIF` and the level data as `CHIPS.DAT`.
 
 ## Usage
 
-    $ LD_LIBRARY_PATH=/path/to/natives java -jar chips-0.1.0-standalone.jar /path/to/CHIPS.DAT <levelid>
-
-## Example
-
-    $ LD_LIBRARY_PATH=./native java -jar chips-0.1.0-standalone.jar ./CHIPS.DAT 24
+    $ lein run
 
 ## License
 

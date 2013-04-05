@@ -71,6 +71,10 @@
 (defn get-cell [state row col]
   (:bot (nth (:world state) (+ col (* row 32)))))
 
+; The makeCurrent/releaseContext pair here isn't very efficient, but
+; makes it possible to call this function from the REPL, which likes
+; to toss things into different threads. OpenGL doesn't play nice with
+; threads
 (defn draw-frame [state]
   (Display/makeCurrent)
   (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
@@ -86,9 +90,11 @@
   (Display/releaseContext))
 
 (defn handle-input [state]
-  (Display/makeCurrent)
-  (Display/releaseContext)
-  state)
+  (-> state
+      (assoc :key-u (Keyboard/isKeyDown Keyboard/KEY_UP))
+      (assoc :key-d (Keyboard/isKeyDown Keyboard/KEY_DOWN))
+      (assoc :key-l (Keyboard/isKeyDown Keyboard/KEY_LEFT))
+      (assoc :key-r (Keyboard/isKeyDown Keyboard/KEY_RIGHT))))
 
 (defn time-to-quit? []
   (Display/isCloseRequested))

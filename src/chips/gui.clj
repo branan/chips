@@ -5,7 +5,7 @@
            [org.lwjgl.opengl Display DisplayMode GL11 GL12 Util]
            [org.lwjgl.input Keyboard]
            [org.lwjgl.util.glu GLU])
-  (:use clojure.java.io))
+  (:require [clojure.java.io :refer [file]] ))
 
 (defn load-texture [filename]
   (let [image (ImageIO/read (file filename))

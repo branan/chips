@@ -1,7 +1,7 @@
 (ns chips.parser
-  (:use gloss.core
-        gloss.io
-        [clojure.java.io]))
+  (:use gloss.core)
+  (:require [gloss.io :refer [decode]]
+            [clojure.java.io :refer [file input-stream]]))
 
 ;; Everything from here through "(defcodec option..." is busted and
 ;; unused. Options are currently treated as an opaque blob.

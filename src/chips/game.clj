@@ -1,7 +1,14 @@
 (ns chips.game)
 
+(defn maybe-push [cell val]
+  (if (not= val 0)
+    (cons val cell)
+    cell))
+
 (defn build-cell [top bot]
-  {:top top :bot bot})
+  (-> '()
+      (maybe-push bot)
+      (maybe-push top)))
 
 (defn load-level [state lvl]
   (let [leveldata (nth (:levels (:data state)) lvl)
@@ -15,8 +22,7 @@
 
 (defn player-in-cell? [cell]
   (let [player-ids [108 109 110 111]]
-    (or (some #(= (:top cell) %) player-ids)
-        (some #(= (:bot cell) %) player-ids))))
+    (some (zipmap player-ids (repeat true)) cell)))
 
 (defn locate-player [state]
   (let [player-pos (idx-first-match #(player-in-cell? %) (:world state))]
@@ -29,9 +35,14 @@
       (load-level 0)
       (locate-player)))
 
-(defn assoc-cell [state pos tile]
+(defn push-cell [state pos tile]
   (let [cell (nth (:world state) pos)
-        new-cell (assoc cell :bot tile)]
+        new-cell (cons tile cell)]
+    (assoc state :world (assoc (:world state) pos new-cell))))
+
+(defn pop-cell [state pos]
+  (let [cell (nth (:world state) pos)
+        new-cell (rest cell)]
     (assoc state :world (assoc (:world state) pos new-cell))))
 
 (defn next-tick [state]
@@ -59,8 +70,8 @@
 
 (defn update-player-cell [state old-pos]
   (-> state
-      (assoc-cell old-pos 0)
-      (assoc-cell (+ (* (:player-y state) 32) (:player-x state)) 110)))
+      (pop-cell old-pos)
+      (push-cell (+ (* (:player-y state) 32) (:player-x state)) 110)))
 
 (defn update-player-pos [state]
   (let [old-pos (+ (* (:player-y state) 32) (:player-x state))]

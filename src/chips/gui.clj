@@ -69,7 +69,10 @@
     (GL11/glVertex2i (+ col 1) row)))
 
 (defn get-cell [state row col]
-  (:bot (nth (:world state) (+ col (* row 32)))))
+  (let [cell (first (nth (:world state) (+ col (* row 32))))]
+    (if (nil? cell)
+      0
+      cell)))
 
 ; The makeCurrent/releaseContext pair here isn't very efficient, but
 ; makes it possible to call this function from the REPL, which likes

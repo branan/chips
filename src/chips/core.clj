@@ -1,8 +1,7 @@
 (ns chips.core
   (:use chips.parser
         chips.game
-        chips.gui
-        clojure.java.io)
+        chips.gui)
   (:gen-class))
 
 (defn -main [& args]

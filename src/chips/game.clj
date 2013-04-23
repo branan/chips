@@ -50,31 +50,43 @@
 
 (defn move-player-up [state]
   (if (:key-u state)
-    (assoc state :player-y (dec (:player-y state)))
+    (-> state
+        (assoc :player-y (dec (:player-y state)))
+        (assoc :last-move (:tick state)))
     state))
 
 (defn move-player-down [state]
   (if (:key-d state)
-    (assoc state :player-y (inc (:player-y state)))
+    (-> state
+        (assoc :player-y (inc (:player-y state)))
+        (assoc :last-move (:tick state)))
     state))
 
 (defn move-player-left [state]
   (if (:key-l state)
-    (assoc state :player-x (dec (:player-x state)))
+    (-> state
+        (assoc :player-x (dec (:player-x state)))
+        (assoc :last-move (:tick state)))
     state))
 
 (defn move-player-right [state]
   (if (:key-r state)
-    (assoc state :player-x (inc (:player-x state)))
+    (-> state
+        (assoc :player-x (inc (:player-x state)))
+        (assoc :last-move (:tick state)))
     state))
 
+(defn build-pos-idx [y x]
+  (+ (* y 32) x))
+
 (defn update-player-cell [state old-pos]
-  (-> state
-      (pop-cell old-pos)
-      (push-cell (+ (* (:player-y state) 32) (:player-x state)) 110)))
+  (let [new-pos (build-pos-idx (:player-y state) (:player-x state))]
+    (-> state
+        (pop-cell old-pos)
+        (push-cell new-pos 110))))
 
 (defn update-player-pos [state]
-  (let [old-pos (+ (* (:player-y state) 32) (:player-x state))]
+  (let [old-pos (build-pos-idx (:player-y state) (:player-x state))]
     (-> state
         (move-player-up)
         (move-player-down)
